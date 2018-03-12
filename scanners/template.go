@@ -7,16 +7,28 @@ import (
 
 type ScannerExample struct{}
 
+func (scanner *ScannerExample) HandleFile(obj *scan_manager.FileScanObject) {
+	fmt.Println("FileScanObject");
+}
+
+func (scanner *ScannerExample) HandleDir(obj *scan_manager.DirScanObject) {
+	fmt.Println("DirScanObject");
+}
+
+func (scanner *ScannerExample) HandleEnvVariable(obj *scan_manager.EnvVariableScanObject) {
+	fmt.Println("EnvVariableScanObject");
+}
+
 func (scanner *ScannerExample) ProcessScanObject(obj scan_manager.ScanObject) error {
-	switch obj.(type) {
+	switch v := obj.(type) {
 	case *scan_manager.DirScanObject:
-		fmt.Println("DirScanObject");
+		scanner.HandleDir(v)
 		break
 	case *scan_manager.FileScanObject:
-		fmt.Println("FileScanObject");
+		scanner.HandleFile(v)
 		break
 	case *scan_manager.EnvVariableScanObject:
-		fmt.Println("EnvVariableScanObject");
+		scanner.HandleEnvVariable(v)
 		break
 	default:
 		fmt.Println("No idea what kind of object we're dealing with");
