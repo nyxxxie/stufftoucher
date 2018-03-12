@@ -9,7 +9,7 @@ import (
 
 type SSHKeyScanner struct{}
 
-func HandleFile(path string, f os.FileInfo, err error) error {
+func (scanner *SSHKeyScanner) HandleFile(path string, f os.FileInfo, err error) error {
 	if !f.IsDir() {
 		if f.Name() == "known_hosts" {
 			// TODO: Dump list of hosts this user has connected to
@@ -28,7 +28,7 @@ func HandleFile(path string, f os.FileInfo, err error) error {
 	return nil
 }
 
-func HandleDirectory(obj *scan_manager.DirScanObject) {
+func (scanner *SSHKeyScanner) HandleDirectory(obj *scan_manager.DirScanObject) {
 	info := obj.FileInfo();
 	if info.Name() == ".ssh" {
 		filepath.Walk(obj.Path(), HandleFile)
